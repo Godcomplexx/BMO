@@ -1,0 +1,16 @@
+# build output
+build/
+pico/build/
+
+# personal / generated while debugging: voice recordings, serial logs, raw samples
+pico/recordings/
+pico/faces_ref2/_*
+*.wav
+*.npy
+*.log
+__pycache__/
+
+# old Figma export of the 1st palette (not used) and abandoned experiments
+pico/faces_ref/
+pico/faces_procedural.c
+pico/tools/recv.py
