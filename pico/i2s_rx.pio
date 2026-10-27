@@ -1,0 +1,29 @@
+; I2S master, receive only. 32-bit slots, 2 channels (left word, then right word).
+; Side-set: bit0 = BCLK (base pin), bit1 = WS/LRCLK (base pin + 1).
+;
+; Each bit period is [BCLK low][BCLK high]. The microphone changes its data on
+; the falling edge, so the data pin is sampled in the HIGH phase (input sync
+; bypassed, see mic.c). WS falls one BCLK before the left MSB (standard I2S).
+;
+;   side values: 0b00 = BCLK low  / WS low     0b01 = BCLK high / WS low
+;                0b10 = BCLK low  / WS high    0b11 = BCLK high / WS high
+.program i2s_rx
+.side_set 2
+
+.wrap_target
+    set x, 29         side 0b00     ; L0  : left word, bit period 0
+lbits:
+    in pins, 1        side 0b01     ; H0..H29
+    jmp x--, lbits     side 0b00     ; L1..L30
+    in pins, 1        side 0b01     ; H30
+    nop               side 0b10     ; L31 : WS rises
+    in pins, 1        side 0b11     ; H31 (left LSB)
+    set x, 29         side 0b10     ; L32 : right word
+rbits:
+    in pins, 1        side 0b11     ; H32..H61
+    jmp x--, rbits    side 0b10     ; L33..L62
+    in pins, 1        side 0b11     ; H62
+    nop               side 0b00     ; L63 : WS falls
+    in pins, 1        side 0b01     ; H63 (right LSB)
+.wrap
+

@@ -14,3 +14,6 @@ __pycache__/
 pico/faces_ref/
 pico/faces_procedural.c
 pico/tools/recv.py
+
+# personal skill source file
+SKILL*.md
