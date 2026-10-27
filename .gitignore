@@ -17,3 +17,7 @@ pico/tools/recv.py
 
 # personal skill source file
 SKILL*.md
+
+# editor configs: the Raspberry Pi Pico extension regenerates them per machine
+.vscode/
+pico/.vscode/
